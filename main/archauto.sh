@@ -10,8 +10,9 @@ die() {
   exit
 }
 
-
-wifi-menu
+echo
+echo "Assuming already connected to the internet"
+echo
 
 ########################################################
 ### Starting arch install from mount partitions step ###
@@ -51,7 +52,7 @@ echo "Executing script in chroot"
 cd $START_DIR || die
 
 
-cp archauto-chroot.sh /mnt/root/arch-chroot.sh
+cp archauto-chroot.sh /mnt/root/archauto-chroot.sh
 chmod 500 /mnt/root/archauto-chroot.sh || die
 
 # commands passed as: arch-chroot /mnt command

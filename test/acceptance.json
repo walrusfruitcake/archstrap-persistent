@@ -1,0 +1,32 @@
+{
+  "builders": [{
+    "type": "virtualbox-iso",
+    "guest_os_type": "ArchLinux_64",
+    "iso_url": "https://mirrors.kernel.org/archlinux/iso/latest/archlinux-2016.08.01-dual.iso",
+    "iso_checksum": "6db5a9e46267ba7ec4d9ae79d141e5a6d9d3cf88",
+    "iso_checksum_type": "sha1",
+    "ssh_username": "packer",
+    "ssh_password": "packer",
+    "ssh_timeout": "20m",
+    "headless": "false",
+    "http_directory": "../main/",
+    "boot_command": [
+      "<wait><enter><wait10><wait10>",
+      "sgdisk -n 1:0:+1G -t 1:0700 -c 1:bootpart /dev/sda<enter><wait5>",
+      "sgdisk -N 2 -t 2:8300 -c 2:mainpart /dev/sda<enter><wait5>",
+      "mkfs.vfat -i D16E99D1 /dev/sda1<enter><wait5>",
+      "mkfs.ext4 -U 0d9f9a68-b3e4-477e-aa3e-712fb7b01e52 /dev/sda2",
+      "<enter><wait5>",
+      "curl -L http://{{.HTTPIP}}:{{.HTTPPort}}/archauto.sh > archauto.sh<enter>",
+      "curl -L http://{{.HTTPIP}}:{{.HTTPPort}}/archauto-chroot.sh > archauto-chroot.sh<enter>",
+      "chmod 500 archauto.sh",
+      "<enter>",
+      "./archauto.sh<enter>"
+    ],
+    "shutdown_command": "echo 'packer' | sudo -S shutdown -P now"
+  }],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "packer_generated_archiso_vagrant.box"
+  }]
+}
