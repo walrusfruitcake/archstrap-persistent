@@ -21,7 +21,15 @@
       "curl -L http://{{.HTTPIP}}:{{.HTTPPort}}/archauto-chroot.sh > archauto-chroot.sh<enter>",
       "chmod 500 archauto.sh",
       "<enter>",
-      "./archauto.sh<enter>"
+      "./archauto.sh<enter>",
+      "<wait10>",
+      "useradd -Ums /bin/bash packer<enter>",
+      "echo packer:packer | chpasswd<enter>",
+      "usermod -aG wheel packer<enter>",
+      "sed -i 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers",
+      "<enter>",
+      "ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''<enter><wait>",
+      "/usr/bin/sshd -o PasswordAuthentication=yes<enter>"
     ],
     "shutdown_command": "echo 'packer' | sudo -S shutdown -P now"
   }],
