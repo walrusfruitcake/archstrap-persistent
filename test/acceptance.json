@@ -5,12 +5,20 @@
     "iso_url": "https://mirrors.kernel.org/archlinux/iso/latest/archlinux-2016.08.01-dual.iso",
     "iso_checksum": "6db5a9e46267ba7ec4d9ae79d141e5a6d9d3cf88",
     "iso_checksum_type": "sha1",
+    "iso_target_path": "./packer_cache/{{.Name}}",
+    "vboxmanage": [
+      ["modifyvm", "{{.Name}}", "--firmware", "efi64"],
+      ["storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "0", "--device", "0", "--medium", "none"],
+      ["storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "0", "--device", "0", "--medium", "./packer_cache/{{.Name}}", "--type", "dvddrive"]
+    ],
+    "headless": "false",
     "ssh_username": "packer",
     "ssh_password": "packer",
     "ssh_timeout": "20m",
-    "headless": "false",
     "http_directory": "../main/",
     "boot_command": [
+      "<wait10><wait10><wait10><wait10><wait10><wait10>",
+      "<wait10><wait10><wait10><wait10><wait10><wait10>",
       "<wait><enter><wait10><wait10>",
       "sgdisk -n 1:0:+1G -t 1:0700 -c 1:bootpart /dev/sda<enter><wait5>",
       "sgdisk -N 2 -t 2:8300 -c 2:mainpart /dev/sda<enter><wait5>",
