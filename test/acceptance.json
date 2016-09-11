@@ -2,14 +2,15 @@
   "builders": [{
     "type": "virtualbox-iso",
     "guest_os_type": "ArchLinux_64",
-    "iso_url": "https://mirrors.kernel.org/archlinux/iso/latest/archlinux-2016.08.01-dual.iso",
+    "guest_additions_url": "local/guest.iso",
+    "guest_additions_sha256": "cec0df18671adfe62a34d3810543f76f76206b212b2b61791fe026214c77507c",
+    "iso_url": "local/arch.iso",
     "iso_checksum": "6db5a9e46267ba7ec4d9ae79d141e5a6d9d3cf88",
     "iso_checksum_type": "sha1",
-    "iso_target_path": "./packer_cache/{{.Name}}",
     "vboxmanage": [
       ["modifyvm", "{{.Name}}", "--firmware", "efi64"],
       ["storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "0", "--device", "0", "--medium", "none"],
-      ["storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "0", "--device", "0", "--medium", "./packer_cache/{{.Name}}", "--type", "dvddrive"]
+      ["storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "0", "--device", "0", "--medium", "local/arch.iso", "--type", "dvddrive"],
     ],
     "headless": "false",
     "ssh_username": "packer",
